@@ -35,8 +35,7 @@ function handleCellClick(index) {
     state.gameOver = true;
 
     //~~ increse score of both when draw
-    state.scores["X"]++;
-    state.scores["O"]++;
+    state.scores["draws"]++;
 
     setStatus("It's a draw!", '');
     setBoardLocked(true);
@@ -61,7 +60,15 @@ function toggleTheme() {
   setTheme(state.theme);
 }
 
-// TODO: wire up the "Reset Scores" button (#reset-scores-btn)
+//~~ Added: wire up the "Reset Scores" button (#reset-scores-btn)
+function resetScores() {
+  state.scores = { X: 0, O: 0, draws: 0 };
+  renderScores(state.scores);
+}
+document.getElementById('reset-scores-btn')
+  .addEventListener('click', resetScores);
+
+
 
 buildBoard(handleCellClick);
 renderBoard(state.board);
