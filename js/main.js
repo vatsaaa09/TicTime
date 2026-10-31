@@ -11,23 +11,36 @@ const state = {
 function handleCellClick(index) {
   if (state.gameOver) return;
 
+
+  //~~ fixed overwriting
+  if (state.board[index] !== null) return;
   state.board[index] = state.currentPlayer;
+
   renderBoard(state.board);
 
   const result = getGameResult(state.board);
 
   if (result.status === 'win') {
+
     state.gameOver = true;
     state.scores[result.winner]++;
+
     highlightWinningCells(result.line);
     setStatus(`Player ${result.winner} wins!`, result.winner);
     setBoardLocked(true);
     renderScores(state.scores);
     launchConfetti();
+
   } else if (result.status === 'draw') {
     state.gameOver = true;
+
+    //~~ increse score of both when draw
+    state.scores["X"]++;
+    state.scores["O"]++;
+
     setStatus("It's a draw!", '');
     setBoardLocked(true);
+
   } else {
     state.currentPlayer = nextPlayer(state.currentPlayer);
     setStatus(`Player ${state.currentPlayer}'s turn`, state.currentPlayer);
@@ -43,6 +56,7 @@ function startNewGame() {
 }
 
 function toggleTheme() {
+
   state.theme = state.theme === 'light' ? 'dark' : 'light';
   setTheme(state.theme);
 }
